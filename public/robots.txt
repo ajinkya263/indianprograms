@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /settings
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://indianprograms.com/sitemap.xml

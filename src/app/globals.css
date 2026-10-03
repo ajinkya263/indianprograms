@@ -1,0 +1,513 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Legacy tokens kept so existing utilities like bg-saffron still work. */
+  --dark: #070510;
+  --saffron: #E8970A;
+
+  /* Theme tokens — the app reads these; toggling data-theme swaps values. */
+  --page-bg: #070510;
+  --card-bg: #0F0D1A;
+  --card-border: #1A1726;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent: #E8970A;
+  --accent-fg: #000000;
+  --accent-soft: rgba(232, 151, 10, 0.15);
+  --scroll-track: #070510;
+  --scroll-thumb: #1A1726;
+}
+
+/* Classic — warm parchment cream with terracotta accent. Tuned so the
+   contrast between text / borders / cards feels museum-like rather than
+   flat, and every accent lands in the same warm family. */
+[data-theme="classic"] {
+  --page-bg: #EDE3CE;         /* Warm parchment, slightly darker than card */
+  --card-bg: #FAF4E4;         /* Ivory cream — subtle lift off the page */
+  --card-bg-elevated: #FEFAEE;
+  --card-border: #C9B98F;     /* Muted olive-tan — quiet division */
+  --text-primary: #2B2419;    /* Deep espresso, gentle on the eye */
+  --text-secondary: #4E4032;  /* Warm mid-brown, still readable on cream */
+  --text-muted: #7B6C55;      /* Soft tan-gray, matches border tone */
+  --accent: #A0522D;          /* Sienna — refined, warm, non-neon */
+  --accent-hover: #8B4513;    /* Saddle brown, for hovers */
+  --accent-fg: #FAF4E4;       /* Cream on sienna reads elegantly */
+  --accent-soft: rgba(160, 82, 45, 0.12);
+  --scroll-track: #E2D5B8;
+  --scroll-thumb: #B8A578;
+}
+
+body {
+  background-color: var(--page-bg);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Classic theme overrides. Every hardcoded dark surface / text color /
+ * saffron accent in the app tree is remapped here so components written
+ * before the theme tokens still land in the classic palette. */
+[data-theme="classic"] .bg-\[\#070510\],
+[data-theme="classic"] .bg-\[\#070510\]\/95,
+[data-theme="classic"] .bg-\[\#070510\]\/90,
+[data-theme="classic"] .bg-\[\#0A0814\],
+[data-theme="classic"] .bg-\[\#0c0a18\] {
+  background-color: var(--page-bg) !important;
+}
+[data-theme="classic"] .bg-\[\#0F0D1A\],
+[data-theme="classic"] .bg-\[\#0F0D1A\]\/95 {
+  background-color: var(--card-bg) !important;
+}
+[data-theme="classic"] .border-\[\#1A1726\],
+[data-theme="classic"] .border-dark-border,
+[data-theme="classic"] .border-white\/5,
+[data-theme="classic"] .border-white\/10,
+[data-theme="classic"] .border-white\/20 {
+  border-color: var(--card-border) !important;
+}
+[data-theme="classic"] .bg-dark {
+  background-color: var(--page-bg) !important;
+}
+[data-theme="classic"] .bg-white\/5,
+[data-theme="classic"] .bg-white\/10 {
+  background-color: rgba(160, 82, 45, 0.06) !important;
+}
+
+/* Text remapping — cool grays and pure whites become warm browns. */
+[data-theme="classic"] .text-white {
+  color: var(--text-primary) !important;
+}
+[data-theme="classic"] .text-gray-200,
+[data-theme="classic"] .text-gray-300,
+[data-theme="classic"] .text-gray-400 {
+  color: var(--text-secondary) !important;
+}
+[data-theme="classic"] .text-gray-500,
+[data-theme="classic"] .text-gray-600 {
+  color: var(--text-muted) !important;
+}
+
+/* Saffron everywhere — buttons, borders, focus rings, inline styles that
+   used the raw hex #E8970A can't all be caught with a selector, but the
+   `saffron` utility classes and the CSS variable both flip. */
+[data-theme="classic"] .bg-saffron {
+  background-color: var(--accent) !important;
+  color: var(--accent-fg) !important;
+}
+[data-theme="classic"] .text-saffron {
+  color: var(--accent) !important;
+}
+[data-theme="classic"] .border-saffron {
+  border-color: var(--accent) !important;
+}
+[data-theme="classic"] .text-black {
+  color: var(--accent-fg) !important;
+}
+[data-theme="classic"] .ring-saffron\/60 {
+  --tw-ring-color: var(--accent) !important;
+}
+
+/* Card image bottom gradient is a black-to-transparent overlay for
+   badge legibility. On beige it becomes an eye-bruise dark bar; swap it
+   for a warm cream gradient that fades into the card. */
+[data-theme="classic"] .bg-gradient-to-t.from-black\/70 {
+  background-image: linear-gradient(to top, rgba(43, 36, 25, 0.35), rgba(43, 36, 25, 0.08), transparent) !important;
+}
+
+/* Hero section had a dark radial-gradient stack; on beige it looked like
+   a dark hole cut into the page. Redraw with warm sunlight tones. */
+[data-theme="classic"] .hero-premium {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(160, 82, 45, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(212, 160, 23, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 178, 100, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 40%),
+    linear-gradient(180deg, var(--card-bg) 0%, var(--page-bg) 100%) !important;
+}
+
+/* Festive gradient (used behind featured / hero) — warm cream stack. */
+[data-theme="classic"] .festive-gradient,
+[data-theme="classic"] .festive-gradient-v2 {
+  background: linear-gradient(135deg, var(--page-bg) 0%, var(--card-bg) 40%, var(--page-bg) 100%) !important;
+}
+
+/* Skeleton loaders were dark gray on gray; swap to warm cream shimmer. */
+[data-theme="classic"] .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(201, 185, 143, 0.35) 0%,
+    rgba(201, 185, 143, 0.55) 50%,
+    rgba(201, 185, 143, 0.35) 100%
+  ) !important;
+}
+
+/* Search bar glow — replace saffron orange glow with a warm sienna. */
+[data-theme="classic"] .search-glow {
+  box-shadow:
+    0 0 40px rgba(160, 82, 45, 0.10),
+    0 0 80px rgba(160, 82, 45, 0.04),
+    inset 0 1px 0 rgba(160, 82, 45, 0.06) !important;
+}
+
+/* Card-premium hover shadow tint. */
+[data-theme="classic"] .card-premium:hover {
+  border-color: rgba(160, 82, 45, 0.35) !important;
+  box-shadow:
+    0 4px 20px rgba(160, 82, 45, 0.12),
+    0 0 40px rgba(160, 82, 45, 0.06) !important;
+}
+
+/* Emerald "Free" badge is fine visually but the pure emerald reads a bit
+   loud on cream. Nudge it to a slightly earthier green. */
+[data-theme="classic"] .bg-emerald-500\/90,
+[data-theme="classic"] .bg-emerald-500\/95 {
+  background-color: #4F8C4F !important;
+}
+
+/* Placeholder / disabled surfaces. */
+[data-theme="classic"] .bg-black\/30,
+[data-theme="classic"] .bg-black\/50,
+[data-theme="classic"] .bg-black\/70 {
+  background-color: rgba(43, 36, 25, 0.35) !important;
+}
+
+/* The Filters button + expanded advanced panel used the `bg-dark-card`
+   Tailwind class alongside hardcoded #0F0D1A inline styles on inputs.
+   Overriding both here so classic mode renders them cream-on-brown
+   with real contrast instead of dark-on-dark. */
+[data-theme="classic"] .bg-dark-card,
+[data-theme="classic"] .bg-\[\#0F0D1A\] {
+  background-color: var(--card-bg) !important;
+}
+
+/* Form inputs inside the advanced filters panel. */
+[data-theme="classic"] input[type="text"],
+[data-theme="classic"] input[type="date"],
+[data-theme="classic"] input[type="search"],
+[data-theme="classic"] input[type="email"],
+[data-theme="classic"] input[type="number"],
+[data-theme="classic"] textarea {
+  background-color: var(--card-bg-elevated, #FEFAEE) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--card-border) !important;
+}
+[data-theme="classic"] input::placeholder,
+[data-theme="classic"] textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 1 !important;
+}
+[data-theme="classic"] input[type="date"] {
+  color-scheme: light !important;
+}
+[data-theme="classic"] input:focus,
+[data-theme="classic"] textarea:focus,
+[data-theme="classic"] select:focus {
+  border-color: var(--accent) !important;
+  outline: none !important;
+}
+
+/* Focus-ring and hover borders on the classic filter buttons. */
+[data-theme="classic"] .hover\:border-gray-500:hover {
+  border-color: var(--accent) !important;
+}
+[data-theme="classic"] .focus\:border-saffron\/50:focus,
+[data-theme="classic"] .focus\:border-saffron:focus {
+  border-color: var(--accent) !important;
+}
+
+/* rang-red is a "danger / clear" accent — swap to a warm sienna so it
+   still reads as an action but matches the classic palette. */
+[data-theme="classic"] .text-rang-red { color: #A0522D !important; }
+[data-theme="classic"] .border-rang-red\/30 { border-color: rgba(160, 82, 45, 0.3) !important; }
+[data-theme="classic"] .border-rang-red\/60 { border-color: rgba(160, 82, 45, 0.6) !important; }
+[data-theme="classic"] .bg-rang-red\/5 { background-color: rgba(160, 82, 45, 0.06) !important; }
+
+/* placeholder-gray-600 across inputs. */
+[data-theme="classic"] .placeholder-gray-600::placeholder {
+  color: var(--text-muted) !important;
+}
+
+/* Tricolor gradient text — the dark-theme version fades through white,
+   which vanishes on beige. Rebuild the tricolor with darker saffron and
+   forest-green tones and swap the white waypoint for a warm brown so the
+   letters read against cream. Keeps the India-flag semantic. */
+[data-theme="classic"] .text-tricolor {
+  background: linear-gradient(
+    90deg,
+    #B8471E,   /* deep saffron */
+    #C6803A,   /* burnt amber */
+    #4A3821,   /* warm brown middle (replaces the invisible white) */
+    #2E7D32,   /* forest green */
+    #B8471E    /* wrap-around saffron */
+  ) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* text-festive follows the same fix — soft amber → deep sienna. */
+[data-theme="classic"] .text-festive {
+  background: linear-gradient(90deg, #B8471E, #C67B3C, #A0522D, #B8471E) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Footer strip mirrors the top navigation strip in classic mode — same
+   dark surface, same greys, same tricolor logo. Reads as a matching
+   bookend to the top nav so the cream page is framed above AND below.
+   Selector combines tag + class so it beats the earlier bg-[#0F0D1A]
+   → cream override on specificity (class-only was winning otherwise). */
+[data-theme="classic"] footer.bg-\[\#0F0D1A\],
+[data-theme="classic"] footer[class*="bg-"] {
+  background-color: #070510 !important;
+  color: #e2e8f0 !important;
+}
+[data-theme="classic"] footer .text-white,
+[data-theme="classic"] footer.bg-\[\#0F0D1A\] .text-white { color: #ffffff !important; }
+[data-theme="classic"] footer .text-gray-300 { color: #d1d5db !important; }
+[data-theme="classic"] footer .text-gray-400 { color: #9ca3af !important; }
+[data-theme="classic"] footer .text-gray-500 { color: #6b7280 !important; }
+[data-theme="classic"] footer .text-gray-600 { color: #4b5563 !important; }
+[data-theme="classic"] footer .text-gray-700 { color: #374151 !important; }
+/* Tricolor logo — middle syllables stay pure white so the flag reads. */
+[data-theme="classic"] footer .brand-mid {
+  color: #FFFFFF !important;
+  -webkit-text-stroke: 0 !important;
+          text-stroke: 0 !important;
+}
+
+/* Top navigation strip stays dark even in classic mode — a clean band
+   above the cream page. Everything nested inside the sticky <nav> also
+   reverts to dark-theme colors so the strip reads as a single unit
+   (links, dropdowns, mobile menu). */
+[data-theme="classic"] nav.sticky.top-0 {
+  background-color: rgba(7, 5, 16, 0.92) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0 !important;
+}
+[data-theme="classic"] nav.sticky.top-0 .bg-\[\#070510\],
+[data-theme="classic"] nav.sticky.top-0 .bg-\[\#070510\]\/95,
+[data-theme="classic"] nav.sticky.top-0 .bg-\[\#070510\]\/90 {
+  background-color: rgba(7, 5, 16, 0.92) !important;
+}
+[data-theme="classic"] nav.sticky.top-0 .bg-\[\#0F0D1A\] {
+  background-color: #0F0D1A !important;
+}
+[data-theme="classic"] nav.sticky.top-0 .border-\[\#1A1726\],
+[data-theme="classic"] nav.sticky.top-0 .border-white\/5,
+[data-theme="classic"] nav.sticky.top-0 .border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+[data-theme="classic"] nav.sticky.top-0 .text-white { color: #ffffff !important; }
+[data-theme="classic"] nav.sticky.top-0 .text-gray-200,
+[data-theme="classic"] nav.sticky.top-0 .text-gray-300 { color: #d1d5db !important; }
+[data-theme="classic"] nav.sticky.top-0 .text-gray-400 { color: #9ca3af !important; }
+[data-theme="classic"] nav.sticky.top-0 .text-gray-500,
+[data-theme="classic"] nav.sticky.top-0 .text-gray-600 { color: #6b7280 !important; }
+[data-theme="classic"] nav.sticky.top-0 .bg-white\/5,
+[data-theme="classic"] nav.sticky.top-0 .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+}
+/* Mobile menu dropdown sits directly after </nav> in the DOM, but we
+   want it to keep the dark strip look. Explicitly target it. */
+[data-theme="classic"] nav.sticky.top-0 + div.md\:hidden,
+[data-theme="classic"] div.md\:hidden.border-t.border-white\/5.bg-\[\#070510\]\/95 {
+  background-color: rgba(7, 5, 16, 0.95) !important;
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  color: #e2e8f0;
+}
+[data-theme="classic"] nav.sticky.top-0 + div.md\:hidden .text-gray-300 { color: #d1d5db !important; }
+[data-theme="classic"] nav.sticky.top-0 + div.md\:hidden .text-gray-400 { color: #9ca3af !important; }
+[data-theme="classic"] nav.sticky.top-0 + div.md\:hidden .border-white\/5 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Festive gradient backgrounds */
+.festive-gradient {
+  background: linear-gradient(135deg, #070510 0%, #1a0a2e 30%, #0d1117 60%, #070510 100%);
+}
+
+.festive-glow {
+  box-shadow: 0 0 60px rgba(232, 151, 10, 0.08), 0 0 120px rgba(232, 151, 10, 0.04);
+}
+
+/* Decorative rangoli-inspired border */
+.rangoli-border {
+  border-image: linear-gradient(90deg, transparent, #E8970A, #D94F4F, #E8970A, transparent) 1;
+}
+
+/* Animated gradient text */
+.text-festive {
+  background: linear-gradient(90deg, #E8970A, #F5B642, #D94F4F, #E8970A);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+/* Skeleton loader sweep */
+@keyframes skeleton-sweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(26, 23, 38, 0.6) 0%,
+    rgba(40, 35, 56, 0.9) 50%,
+    rgba(26, 23, 38, 0.6) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-sweep 1.8s ease-in-out infinite;
+}
+
+/* Floating particles effect */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 8s ease-in-out 2s infinite;
+}
+
+/* Indian tricolor gradient */
+.tricolor-border {
+  border-image: linear-gradient(90deg, #FF9933, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%, #138808) 1;
+}
+
+.tricolor-line {
+  background: linear-gradient(90deg, #FF9933, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%, #138808);
+  height: 3px;
+}
+
+/* Enhanced text-festive with tricolor */
+.text-tricolor {
+  background: linear-gradient(90deg, #FF9933, #F5B642, #FFFFFF, #138808, #FF9933);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* Festive hero with more warmth */
+.festive-gradient-v2 {
+  background: linear-gradient(135deg, #070510 0%, #1a0a2e 20%, #1a1005 40%, #0a1a0a 60%, #070510 100%);
+}
+
+/* Glowing card hover effect */
+.card-festive-hover:hover {
+  box-shadow: 0 0 30px rgba(255, 153, 51, 0.1), 0 0 60px rgba(19, 136, 8, 0.05);
+}
+
+/* Premium hero background */
+.hero-premium {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(255, 153, 51, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, rgba(212, 160, 23, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 107, 0, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 20%, rgba(255, 215, 0, 0.04) 0%, transparent 40%),
+    linear-gradient(180deg, #0c0a18 0%, #070510 100%);
+}
+
+/* Large mandala watermark background */
+.mandala-bg {
+  background-image:
+    /* Outer ring */
+    radial-gradient(circle, transparent 44%, rgba(255, 153, 51, 0.8) 45%, rgba(255, 153, 51, 0.8) 46%, transparent 47%),
+    /* Second ring */
+    radial-gradient(circle, transparent 38%, rgba(255, 215, 0, 0.5) 38.5%, rgba(255, 215, 0, 0.5) 39%, transparent 39.5%),
+    /* Mid ring */
+    radial-gradient(circle, transparent 31%, rgba(255, 153, 51, 0.7) 31.5%, rgba(255, 153, 51, 0.7) 32%, transparent 32.5%),
+    /* Inner ring */
+    radial-gradient(circle, transparent 20%, rgba(255, 215, 0, 0.6) 20.5%, rgba(255, 215, 0, 0.6) 21%, transparent 21.5%),
+    /* Center glow */
+    radial-gradient(circle, rgba(255, 215, 0, 0.8) 4%, rgba(255, 153, 51, 0.4) 8%, transparent 12%),
+    /* Large petals */
+    repeating-conic-gradient(from 0deg, transparent 0deg, rgba(255, 153, 51, 0.35) 1.5deg, transparent 3deg, transparent 22.5deg),
+    /* Secondary petals offset */
+    repeating-conic-gradient(from 11.25deg, transparent 0deg, rgba(255, 215, 0, 0.25) 1.5deg, transparent 3deg, transparent 22.5deg),
+    /* Fine petals */
+    repeating-conic-gradient(from 5.625deg, transparent 0deg, rgba(255, 153, 51, 0.15) 1deg, transparent 2deg, transparent 11.25deg),
+    /* Dots ring outer */
+    radial-gradient(circle, transparent 42%, rgba(255, 215, 0, 0.5) 42.2%, transparent 42.5%),
+    /* Dots ring inner */
+    radial-gradient(circle, transparent 25%, rgba(255, 153, 51, 0.4) 25.2%, transparent 25.5%);
+}
+
+/* Golden glow for search bar */
+.search-glow {
+  box-shadow:
+    0 0 40px rgba(255, 153, 51, 0.06),
+    0 0 80px rgba(255, 215, 0, 0.03),
+    inset 0 1px 0 rgba(255, 215, 0, 0.05);
+}
+
+/* Premium card with golden border glow on hover */
+.card-premium {
+  transition: all 0.3s ease;
+}
+.card-premium:hover {
+  border-color: rgba(255, 153, 51, 0.25);
+  box-shadow:
+    0 4px 20px rgba(255, 153, 51, 0.08),
+    0 0 40px rgba(255, 153, 51, 0.04);
+}
+
+/* Glowing accent underline */
+.glow-underline {
+  position: relative;
+}
+.glow-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFD700, #FF9933, #FFD700, transparent);
+  opacity: 0.5;
+}
